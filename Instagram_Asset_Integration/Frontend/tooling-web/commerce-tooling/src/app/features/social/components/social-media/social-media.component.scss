@@ -1,0 +1,311 @@
+/*
+*==================================================
+Copyright [2022] [HCL America, Inc.]
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*================================================== 
+*/
+
+ .main-section {
+  margin: 10px 0;
+  height: 100%;
+}
+
+.main-section-loading-blur {
+  opacity: 0.3;
+}
+
+
+.handle-error {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  padding: .75rem 1.25rem;
+  margin: 20px 0;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.product-details-card {
+  max-width: 430px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 25px 15px;
+}
+
+.error-hint {
+  color: red;
+}
+
+.image-wrapper {
+  display: flex;
+  overflow: auto;
+  white-space: nowrap;
+  margin: 15px 0;
+}
+
+.image-checkbox {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  width: 120px;
+  padding: 0 10px;
+  border: 2px solid lightgrey;
+  border-radius: 3px;
+  height: 90px;
+  margin: 10px;
+}
+
+.multiple-checkbox {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  cursor: pointer;
+}
+
+.selected-image {
+  border: 3px solid #155724;
+}
+
+
+.product-image-div {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.product-name {
+  margin: 13px 0;
+}
+
+
+.product-image {
+  width: 50%;
+}
+
+.common-width {
+  width: 100%;
+  min-width: 0 !important;
+  margin: 10px 0;
+}
+
+.product-description {
+  line-height: 1.6;
+  text-align: justify;
+  overflow: hidden;
+}
+
+.mat-chip-list-items {
+  padding-bottom: 15px;
+}
+
+input.mat-chip-input {
+  width: 360px;
+}
+
+
+
+.publish-btn {
+  margin: 0 6px;
+
+  &:hover {
+    background-color: #3f51b5;
+  }
+}
+
+.close-dailog-btn {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+
+  &:hover {
+    background-color: #6c757d;
+  }
+}
+
+.yes-dailog-btn {
+  &:hover {
+    background-color: #3f51b5;
+  }
+}
+
+.mat-list-base {
+  margin-top: 0 !important;
+}
+
+.product-item-name {
+  color: #3385c2 !important;
+  font-size: 14px;
+}
+
+.product-item-name:focus {
+  color: #0066b3;
+  background: #e6f0f7;
+}
+
+mat-list-item {
+  height: 35px !important;
+}
+
+.loader-section {
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.multiple-image {
+  width: 75px;
+  height: 75px;
+  object-fit: cover;
+}
+
+.delete-button {
+  position: absolute;
+  top: -10px;
+  right: -3px;
+}
+
+.fbLoginMsg {
+  text-align: right;
+  margin: 15px 0;
+  font-family: system-ui;
+}
+
+.fb-login-btn {
+  font-weight: 700;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+.category-list {
+  display: block !important;
+}
+
+.dialog-title{
+  padding-bottom: 10px;
+
+}
+.dialog-container{
+  width : 450px;
+}
+.layout{
+  //margin: 5px 5px;
+  padding: 10px;
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+}
+.product-details{
+  width: 50%;
+}
+.dialog-product-name{
+  margin: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 5px;
+}
+.dialog-product-desc{
+  margin: 4px 0;
+  font-size: 12px;
+  font-weight: 400;
+  max-height: 60px;
+  overflow-y: auto;
+  padding: 10px;
+  overflow-x: hidden;
+}
+.dialog-product-hash{
+  margin: 4px 0;
+  font-size: 12px;
+  font-weight: 400;
+  max-height: 50px;
+  overflow-y: auto;
+  padding: 10px;
+  overflow-x: hidden;
+}
+/* width */
+.content-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.content-scroll::-webkit-scrollbar-button {
+  height: auto; //for vertical scrollbar
+}
+/* Track */
+.content-scroll::-webkit-scrollbar-track {
+  background: #eee;
+}
+/* Handle */
+.content-scroll::-webkit-scrollbar-thumb {
+  background: #6c757d;
+}
+/* Handle on hover */
+.content-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a5a6a7;
+}
+.dialog-image-div{
+  text-align: center;
+  width: 50%;
+}
+.dialog-product-image{
+  width: 58%;
+}
+
+mat-icon {
+  &.social-media-icon {
+    height: 30px;
+    width: 50px;
+
+    &.enabled {
+      fill: #000000;
+    }
+
+    &.disabled {
+      fill: #e6e6e6;
+    }
+  }
+}
+
+.checkbox-disabled {
+  opacity: 0.5;
+}
+
+.hc-breadcrumb {
+  padding: 5px 10px !important;
+  border-radius: 4px;
+}
+.hc-breadcrumb a{
+  font-size: 14px !important;
+  }
+.hc-breadcrumb span{
+  font-size: 14px !important;
+}

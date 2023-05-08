@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ =================================================================
+ Copyright [2022] [HCL America, Inc.]
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ =================================================================
+-->
+<Definitions>
+	<BaseApplicationMenuItems definitionName="cmc/shell/ApplicationMenuItems" package="cmc/shell">
+		<dependency localName="installResources" moduleName="cmc/installment/InstallmentResources"/>
+		<dependency localName="shellResources" moduleName="cmc/shell/ShellResources"/>
+		
+		<!---
+			Application menu item for opening the Social Management tool.
+		-->
+		<ApplicationMenuItem actionName="openBusinessObjectEditor" displayName="${shellResources.socialManagementDisplayName}" id="socialManagement" package="cmc/shell" toolDefinition="cmc/social/SocialManagement">
+			<EnablementAndCondition>
+				<DarkFeatureEnablementCondition featureName="socialManagement"/>
+				<EnablementOrCondition>
+					<EnablementCondition contextName="siteAdministrator" enablementValue="true"/>
+				</EnablementOrCondition>
+			</EnablementAndCondition>
+		</ApplicationMenuItem>		
+		
+	</BaseApplicationMenuItems>
+</Definitions>

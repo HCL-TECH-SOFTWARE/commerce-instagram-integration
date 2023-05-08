@@ -1,0 +1,243 @@
+<!-- 
+==================================================
+Copyright [2022] [HCL America, Inc.]
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+================================================== 
+-->
+
+<div class="hc-paper main-section" fxLayout [ngClass]="[showLoader ? 'main-section-loading-blur': '']">
+	<section class="hc-panel-main hc-border-right" fxLayout="column" fxLayoutGap="16px" fxFlex>
+		<div fxLayout fxLayoutAlign="space-between">
+			<span class="hc-type-h6">Select Product For Publishing</span>
+			<div>
+				<div class="read-only-filters" *ngIf="!showFilters" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="end center"
+					(click)="setFilterVisibility($event, true)">
+					<div>
+						<div class="hc-type-caption">
+							{{ "PAGE_BUILDER.STORE_SELECTION" | translate }}
+						</div>
+						<div class="hc-type-label">
+							{{ selectedStore ? selectedStore.identifier : "" }}
+						</div>
+					</div>
+					<button (click)="toggleShowFilters()" class="filter-button"
+						matTooltip="{{ 'PAGE_BUILDER.SHOW_FILTERS' | translate }}">
+						<mat-icon color="primary" matSuffix>edit</mat-icon>
+					</button>
+			</div>
+		
+			<form [formGroup]="storeForm" autocomplete="off" *ngIf="showFilters" class="filters" fxLayout="row"
+					fxLayoutAlign="end center" tabindex="0" #filters (focusout)="setFilterVisibility($event, false)">
+					<mat-form-field appearance="outline" class="store-filter icon-suffix hc-form-field-small">
+						<mat-label>{{ "PAGE_BUILDER.STORE_FILTER" | translate }}</mat-label>
+						<input matInput id="store" (input)="searchStores($event.target.value)" placeholder="{{
+												'PAGE_BUILDER.SELECT_STORE_PLACEHOLDER' | translate
+											}}" formControlName="store" [matAutocomplete]="storeAutocomplete" (blur)="resetSelectedStore()" />
+						<mat-autocomplete #storeAutocomplete="matAutocomplete"
+							(optionSelected)="selectStore($event.option.value)">
+							<mat-option *ngFor="let store of storeList" [value]="store">
+								{{ store.identifier }}
+							</mat-option>
+						</mat-autocomplete>
+						<mat-icon matSuffix>filter_list</mat-icon>
+					</mat-form-field>
+					<button (click)="toggleShowFilters()" class="hide-filter"
+						matTooltip="{{ 'PAGE_BUILDER.HIDE_FILTERS' | translate }}">
+						<mat-icon color="primary" matSuffix>visibility_off</mat-icon>
+					</button>
+			</form>
+			</div>
+		</div>
+
+		<section *ngIf="!showProductDetailPage"
+				class="no-products"
+				fxLayout="column"
+				fxLayoutAlign="none center">
+			<img src="./assets/images/search.svg" alt="SearchIcon"/>
+			<div class="hc-type-h6">
+				{{ "SOCIAL.SEARCH_MESSAGE" | translate }}
+			</div>
+		</section>
+
+		<ng-container *ngIf="showProductDetailPage">
+			<div class="product-details-card">
+				<div class="product-image-div">
+					<img class="product-image" src={{productDetail.thumbnail}} alt="product-image">
+				</div>
+                
+				<div class="image-wrapper" *ngIf="showMultipleImages">
+					<div class="image-checkbox" *ngFor="let image of images" 
+					[ngClass]="[image.selected ? 'selected-image': '']">
+						<img src={{image.mediaURL}} alt="image" class="multiple-image">
+						<mat-checkbox [checked]="image.selected" class="multiple-checkbox" 
+						[disabled]="image.disabled" (change)="selectImage(image)">						
+						</mat-checkbox>
+					</div>
+				</div>
+
+				<div *ngIf="selectedCount>=2" class="handle-error">
+					<strong>Note: </strong>Maximum {{selectedCount}} images are allowed.
+				</div>
+
+				<div class="product-name"><span class="hc-type-subheading">{{productDetail.name}}</span></div>
+
+				<mat-form-field appearance="fill" class="common-width">
+					<mat-label>Edit Description</mat-label>
+					<textarea matInput
+					 #textarea cdkTextareaAutosize autocomplete="off" class="product-description"
+						[(ngModel)]="productDetail.description" (input)="getTotalCharacters()">
+					</textarea>
+					<mat-hint align="start"
+					[ngClass]="[productDetail.description.length > maximumCharacters - productDetail.name.length - productDetail.hashtags.join('').length? 'error-hint': '']">
+					Max {{maximumCharacters - productDetail.name.length - hashtagString.length}} characters</mat-hint>
+					<mat-hint align="end"
+					[ngClass]="[productDetail.description.length > maximumCharacters - productDetail.name.length - productDetail.hashtags.join('').length? 'error-hint': '']">
+					{{productDetail.description.length}}/{{maximumCharacters - productDetail.name.length - hashtagString.length}}</mat-hint>
+				</mat-form-field>
+              
+			
+				<mat-form-field appearance="fill" class="common-width">
+				<mat-chip-list #chipList [(ngModel)]="productDetail.hashtags"  [ngClass]="[productDetail.hashtags.length>0 ? 'mat-chip-list-items': '']">
+					<mat-chip *ngFor="let hashtag of productDetail.hashtags" [selectable]="selectable"
+					[removable]="removable" (removed)="removeHashtag(hashtag)">
+					{{hashtag}}
+					<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+				</mat-chip>
+			   </mat-chip-list>
+			   <input matInput placeholder="Enter hashtags..." autocomplete="off" [matChipInputFor]="chipList"
+						[matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+						(matChipInputTokenEnd)="add($event)" (input)="getTotalCharacters()" />
+				<mat-hint align="start"
+					[ngClass]="[productDetail.hashtags.length === maximumHashtags ? 'error-hint': '']">
+					Max {{maximumHashtags}} hashtags</mat-hint>
+				
+					<mat-hint align="end"
+					[ngClass]="[productDetail.hashtags.length === maximumHashtags ? 'error-hint': '']">
+					{{productDetail.hashtags.length}}/{{maximumHashtags}}</mat-hint>
+				</mat-form-field>
+				
+				<div *ngIf="showInvalidCharacterLength" class="handle-error">
+					<strong>Note: </strong>The maximum number of characters permitted for caption
+						(Including Product Name, Description, Hashtags) is {{maximumCharacters}} to publish.
+				</div>		
+			</div>
+		
+			<div fxFlex fxLayout="column">
+				<form [formGroup]="socialMediaButtons">
+				<div fxLayout="row" fxLayoutAlign="end">
+					<div fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon svgIcon="instagram-icon" class="social-media-icon enabled"></mat-icon>
+                        <mat-checkbox formControlName="instagram" 
+						[checked]="socialMediaButtons.value.instagram"
+						(change)="clickInstaCheckbox()"></mat-checkbox>
+					</div>
+					<div fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon svgIcon="facebook-icon" class="social-media-icon disabled"></mat-icon>
+						<mat-checkbox [disabled]="socialMediaButtons.value.facebook" class="checkbox-disabled"></mat-checkbox>
+					</div>
+					<div fxLayout="column" fxLayoutAlign="center center">
+						<mat-icon svgIcon="whatsapp-icon" class="social-media-icon disabled"></mat-icon>
+						<mat-checkbox [disabled]="socialMediaButtons.value.whatsapp" class="checkbox-disabled"></mat-checkbox>
+					</div>
+				</div>
+				<div *ngIf="showButtons" style="margin:10px 0;text-align:right;">
+					<div style="margin:15px 0;">
+						<button mat-flat-button color="primary" class="publish-btn" 
+						[disabled]="enteredCharacters > maximumCharacters ? 'true': isDisabledPublish" 
+						(click)="createMedia()">Review</button>
+					</div>
+					<fb-login-button (loginStatus)="loginStatusforFB($event)" (accessToken)="getAccessToken($event)" [storeId]="getStoreId"></fb-login-button>	
+				</div>
+				</form>
+			</div>
+		</ng-container>
+	</section>
+	
+	<section class="hc-panel-side" fxFlex="40" fxFlex.gt-sm="30" fxFlex.gt-md="25" fxFlex.gt-lg="20" fxFlex.gt-xl="20">
+		<span class="hc-type-h6">Product Selection</span>
+		<hr />
+		<mat-tab-group dynamicHeight animationDuration="0ms" (selectedTabChange)="onTabClick($event)">
+			<mat-tab label="{{'SOCIAL.SEARCH' | translate}}">
+				<form [formGroup]="listSearchForm"
+						autocomplete="off">
+					<mat-form-field appearance="outline"
+							class="hc-search-input icon-suffix" style="min-width:-webkit-fill-available;">
+						<mat-label>{{ "SEARCH.SEARCH" | translate }}</mat-label>
+						<input matInput #searchInput
+						    (input)="searchProducts($event.target.value)"
+							title="{{ 'SEARCH.SEARCH_BY_SEARCH_TERM' | translate }}"
+							placeholder="{{ 'SEARCH.SEARCH' | translate }}"
+							formControlName="searchTerm">
+						<mat-icon matSuffix>search</mat-icon>
+						<span class="filter-clear" *ngIf="currentSearchTerm !=null" (click)="clearSearchTerm()">
+							<mat-icon>clear</mat-icon>
+							<span class="clear-margin">{{ "SEARCH.CLEAR" | translate }}</span>
+						</span>
+					</mat-form-field>
+				</form>
+				
+				<mat-list role="list">
+						<mat-list-item *ngFor="let product of products" role="listitem">
+							<button mat-button class="product-item-name" (click)="showProductDetails(product);scrollToTop();">
+							{{product.name}}</button>
+						</mat-list-item>
+		        </mat-list>
+				<span  class="hc-type-caption" style="color:#f44336;" *ngIf="showSearchClearMessage"> search term is cleared</span>
+			</mat-tab>
+			<mat-tab label="{{'SOCIAL.BROWSE' | translate}}">
+				<mat-tree *ngIf="!showBreadcrumb" [dataSource]="categoryDataSource" [treeControl]="categoryTreeControl">
+
+				<mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding
+					[ngClass]="[selectedCategoryId === node.category.id ? 'category-list': '']">
+					<button mat-icon-button disabled></button>
+					<button mat-button
+					(click)="toggleCategorySelection(node.category,node)"
+						>
+						{{node.category.name}}
+					</button>
+				
+				</mat-tree-node>
+
+				<mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+					<button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+						<mat-icon class="mat-icon-rtl-mirror">
+							{{categoryTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+						</mat-icon>
+					</button>
+					<button mat-button style="pointer-events:none;">{{node.category.name}}</button>
+				</mat-tree-node>
+
+                   
+				</mat-tree> 
+				<div class="hc-breadcrumb" *ngIf="showBreadcrumb" fxLayout fxLayoutGap="4px" fxLayoutAlign="none center">
+					<a class="action-link" (click)="parentCategoryList()" >{{parentBreadcrumbName}}</a>
+					<mat-icon>arrow_drop_down</mat-icon>
+					<span>{{childBreadcrumbName}}</span>
+				</div>
+				<div *ngIf="showBreadcrumb">
+				<mat-list role="list" *ngIf="currentProducts != null" class="browse-products-list">
+				<mat-list-item *ngFor="let currentProduct of currentProducts" role="listitem">
+					<button mat-button class="product-item-name" (click)="showProductDetails(currentProduct);scrollToTop();">
+						{{currentProduct.name}}</button>
+				</mat-list-item>
+			</mat-list>
+		    </div>
+
+			</mat-tab>
+		</mat-tab-group>
+	</section>
+</div>
+<div class="loader-section" *ngIf="showLoader">
+	<mat-spinner></mat-spinner>
+</div>
+

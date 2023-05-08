@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE Policies SYSTEM "../dtd/accesscontrolpolicies.dtd">
+
+<Policies>
+ 	
+ 	<ResourceCategory Name="com.hcl.commerce.instagram.commands.InstagramCreateMediaCmdResourceCategory"
+			ResourceBeanClass="com.hcl.commerce.instagram.commands.InstagramCreateMediaCmd">
+		<ResourceAction Name="ExecuteCommand" />
+	</ResourceCategory>	
+	<ResourceCategory Name="com.hcl.commerce.instagram.commands.InstagramPublishMediaCmdResourceCategory"
+			ResourceBeanClass="com.hcl.commerce.instagram.commands.InstagramPublishMediaCmd">
+		<ResourceAction Name="ExecuteCommand" />
+	</ResourceCategory>	
+	<ResourceCategory Name="com.hcl.commerce.instagram.commands.InstagramGetDetailsCmdResourceCategory"
+			ResourceBeanClass="com.hcl.commerce.instagram.commands.InstagramGetDetailsCmd">
+		<ResourceAction Name="ExecuteCommand" />
+	</ResourceCategory>			
+	
+<ResourceGroup Name="CustomerServiceRepCmdResourceGroup"  OwnerID="RootOrganization">
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramCreateMediaCmdResourceCategory" />
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramPublishMediaCmdResourceCategory" />
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramGetDetailsCmdResourceCategory" />    
+</ResourceGroup>	
+<ResourceGroup Name="CustomerServiceSupervisorCmdResourceGroup"  OwnerID="RootOrganization">
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramCreateMediaCmdResourceCategory" />
+    <ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramPublishMediaCmdResourceCategory" />
+    <ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramGetDetailsCmdResourceCategory" />
+</ResourceGroup>
+<ResourceGroup Name="BuyerAdministratorsCommandsResourceGroup"  OwnerID="RootOrganization">
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramCreateMediaCmdResourceCategory" />
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramPublishMediaCmdResourceCategory" />
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramGetDetailsCmdResourceCategory" />
+</ResourceGroup>
+<ResourceGroup Name="SellerAdministratorsCommandsResourceGroup"  OwnerID="RootOrganization">
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramCreateMediaCmdResourceCategory" />
+    <ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramPublishMediaCmdResourceCategory" />
+    <ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramGetDetailsCmdResourceCategory" />
+</ResourceGroup>
+<ResourceGroup Name="BuyerAdministratorsSelfServicesCommandsResourceGroup"  OwnerID="RootOrganization">
+	<ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramCreateMediaCmdResourceCategory" />
+    <ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramPublishMediaCmdResourceCategory" />
+    <ResourceGroupResource Name="com.hcl.commerce.instagram.commands.InstagramGetDetailsCmdResourceCategory" />
+</ResourceGroup>
+ 
+</Policies>
